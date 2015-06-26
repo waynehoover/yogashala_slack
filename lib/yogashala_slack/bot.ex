@@ -2,15 +2,11 @@ defmodule YogashalaSlack.Bot do
   use Slack
 
   def start_link(initial_state) do
-    Slack.start_link(__MODULE__, System.get_env("SLACK_BOT_API_TOKEN"), initial_state ++ %{restraunts: ["Ekim"] })
+    Slack.start_link(__MODULE__, System.get_env("SLACK_BOT_API_TOKEN"), initial_state)
   end
 
   def init(initial_state, slack) do
-    {:ok, initial_state}
-  end
-
-  def handle_message({:type, "hello", response}, slack, state) do
-    {:ok, state}
+    {:ok, initial_state ++ %{restraunts: ["Ekim"]} }
   end
 
   def handle_message({:type, "message", %{channel: channel, text: "yogabot: " <> command}}, slack, state) do
