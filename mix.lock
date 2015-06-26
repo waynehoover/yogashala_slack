@@ -4,6 +4,6 @@
   "httpoison": {:hex, :httpoison, "0.6.2"},
   "idna": {:hex, :idna, "1.0.2"},
   "jsx": {:hex, :jsx, "2.4.0"},
-  "slack": {:hex, :slack, "0.0.5"},
+  "slack": {:git, "git://github.com/waynehoover/Elixir-Slack.git", "c5f47568cee85007d35797c13eb3bced9a05e2e8", []},
   "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.5"},
-  "websocket_client": {:git, "https://github.com/jeremyong/websocket_client", "f6892c8b55004008ce2d52be7d98b156f3e34569", []}}
+  "websocket_client": {:git, "git://github.com/jeremyong/websocket_client.git", "f6892c8b55004008ce2d52be7d98b156f3e34569", []}}
