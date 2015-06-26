@@ -13,13 +13,13 @@ defmodule YogashalaSlack.Bot do
     {:ok, state}
   end
 
-  def handle_message({:type, "message", response}, slack, state) do
+  def handle_message({:type, "message", %{channel: channel, text: "yogabot: " <> command}}, slack, state) do
 
-    case response.text do
-      "yogabot: lunchme add " <> restraunt ->
+    case command do
+      "lunchme" -> state.restraunts |> pick_random |> Slack.send_message(channel, slack)
+      "lunchme add " <> restraunt -> 
         state = put_in state.restraunts, [ restraunt | state.restraunts ]
-        Slack.send_message("Added restraunt #{restraunt}. Count is now #{Enum.count(state.restraunts)}", response.channel, slack)
-      "yogabot: " <> command -> Slack.send_message(do_command(command, state), response.channel, slack)
+        Slack.send_message("Added restraunt #{restraunt}. Count is now #{Enum.count(state.restraunts)}", channel, slack)
       _ -> true
     end
 
@@ -34,13 +34,5 @@ defmodule YogashalaSlack.Bot do
   defp pick_random(list) do
     :random.seed(:erlang.monotonic_time, :erlang.unique_integer, :erlang.monotonic_time)
     Enum.at(list, :random.uniform(length(list)) - 1)
-  end
-
-  defp do_command("lunchme", state) do
-    pick_random state.restraunts
-  end
-
-  defp do_command(command, _state) do
-    "Unsupported command `#{command}`"
   end
 end
