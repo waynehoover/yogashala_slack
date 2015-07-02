@@ -6,16 +6,21 @@ defmodule YogashalaSlack.Bot do
   end
 
   def init(initial_state, slack) do
-    {:ok, initial_state ++ %{restraunts: ["Ekim"]} }
+    {:ok, initial_state ++ %{restraunts: HashSet.new} }
   end
 
   def handle_message({:type, "message", %{channel: channel, text: "yogabot: " <> command}}, slack, state) do
 
     case command do
       "lunchme" -> state.restraunts |> pick_random |> Slack.send_message(channel, slack)
+      "lunchme list" -> 
+        Slack.send_message("#{inspect state.restraunts}", channel, slack)
       "lunchme add " <> restraunt -> 
-        state = put_in state.restraunts, [ restraunt | state.restraunts ]
+        state = put_in state.restraunts, Set.put(state.restraunts, restraunt)
         Slack.send_message("Added restraunt #{restraunt}. Count is now #{Enum.count(state.restraunts)}", channel, slack)
+      "lunchme remove " <> restraunt -> 
+        state = put_in state.restraunts, Set.delete(state.restraunts, restraunt)
+        Slack.send_message("Removed restraunt #{restraunt}. Count is now #{Enum.count(state.restraunts)}", channel, slack)        
       _ -> true
     end
 
